@@ -1,5 +1,6 @@
 import subprocess
 
+
 def install(command,init):
     try:
         proc = subprocess.Popen(command.split(' '),stderr=subprocess.PIPE, stdout=subprocess.PIPE)

@@ -1,4 +1,4 @@
-import piassistant.util.package as package
+import assistant.util.package as package
 import subprocess
 import tempfile
 
