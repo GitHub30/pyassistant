@@ -62,7 +62,7 @@ class Snowboy():
         self.ring_buffer = RingBuffer(self.detector.NumChannels() * self.detector.SampleRate() * 5)
 
 
-    def start(self,sleep_time=0.03):
+    def start(self,active_callback,sleep_time=0.03):
 
         def audio_callback(in_data, frame_count, time_info, status):
             self.ring_buffer.extend(in_data)
@@ -81,7 +81,7 @@ class Snowboy():
 
         self.hotword = None
 
-        while True:
+        while active_callback():
             data = self.ring_buffer.get()
             if len(data) == 0:
                 time.sleep(sleep_time)

@@ -7,7 +7,7 @@ class SoxRecorder():
 
     def __init__(self):
         package.install('sox', 'sudo apt-get install -y sox')
-        self.threshold = '-35d'
+        self.threshold = '-15d'
         self.start_duration = '00:00:00.3'
         self.end_duration = '00:00:1'
         self.default_mic,self.default_speaker = alsa.get_default()

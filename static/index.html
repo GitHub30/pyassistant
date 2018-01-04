@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title></title>
+    <script language="javascript">
+      var ws = new WebSocket("ws://192.168.1.2:8000/ws");
+      ws.onopen = function() {
+       ws.send("Hello, world");
+      };
+      ws.onmessage = function (evt) {
+	   document.write("<strong>" + evt.data + "</strong>");
+      };
+
+      document.getElementById('btn-start').onclick = function(){
+            ws.send({command:'ASSISTANT_START',detail:''})
+      };
+
+      document.getElementById('btn-stop').onclick = function(){
+        ws.send({command:'ASSISTANT_STOP',detail:''})
+      };
+    </script>
+  </head>
+  <body>
+    <button id="btn-start">Start</button>
+    <button id="btn-stop">Stop</button>
+  </body>
+</html>

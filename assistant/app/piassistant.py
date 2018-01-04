@@ -4,6 +4,7 @@ from assistant.util.assistant import Assistant
 from assistant.slu.cognitive_luis import CognitiveLuis
 from assistant.tts.open_jtalk import OpenJtalk
 from assistant.hwd.snowboy import Snowboy
+
 import logging
 logging.basicConfig()
 logger = logging.getLogger('pi-assistant')
@@ -12,6 +13,13 @@ logger.setLevel(logging.INFO)
 class PiAssistant(Assistant):
     def __init__(self):
         super().__init__()
+        self.__is_active = True
+
+    def stop(self):
+        self.__is_active = False
+
+    def is_active(self):
+        return self.__is_active
 
     def conversation(self):
         self.hwd = Snowboy()
@@ -19,9 +27,9 @@ class PiAssistant(Assistant):
         self.asr = CognitiveSpeech(self.setting['COGNITIVE_SPEECH_KEY'])
         self.slu = CognitiveLuis(self.setting['COGNITIVE_LUIS_APPID'], self.setting['COGNITIVE_LUIS_APPKEY'])
         self.tts = OpenJtalk()
-        while True:
+        while self.__is_active:
             yield ('CONVERSATION_START',None)
-            hotword = self.hwd.start()
+            hotword = self.hwd.start(lambda :self.__is_active)
             yield ('DETECT_HOTWORD', hotword)
             file = self.recorder.record()
             yield ('USER_SPEECH_END',file)
@@ -37,12 +45,3 @@ class PiAssistant(Assistant):
 
     def say(self,text):
         self.tts.say(text)
-
-if __name__ == '__main__':
-    with PiAssistant() as assistant:
-        for event,content in assistant.conversation():
-            logger.info('------ [event] %s ------'%event)
-            logger.info(content)
-            if event == 'SLU_END':
-                assistant.say('こんにちは')
-
