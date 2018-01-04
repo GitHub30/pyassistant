@@ -7,7 +7,6 @@ def list_device():
     command = 'aplay -l'
     p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,shell=True)
     stdout = p.stdout.read().decode('utf-8')
-    stderr = p.stderr.read().decode('utf-8')
 
     speaker_list = []
     for o in stdout.split('\n'):
@@ -40,7 +39,6 @@ def list_device():
     command = 'arecord -l'
     p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     stdout = p.stdout.read().decode('utf-8')
-    stderr = p.stderr.read().decode('utf-8')
 
     mic_list = []
     for o in stdout.split('\n'):
@@ -78,7 +76,6 @@ def get_default():
     command = 'aplay -L'
     p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     stdout = p.stdout.read().decode('utf-8')
-    stderr = p.stderr.read().decode('utf-8')
 
     default_card_name = None
     default_device_name = None
@@ -104,7 +101,6 @@ def get_default():
     command = 'arecord -L'
     p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     stdout = p.stdout.read().decode('utf-8')
-    stderr = p.stderr.read().decode('utf-8')
 
     default_card_name = None
     default_device_name = None
@@ -129,7 +125,3 @@ def get_default():
 
     return default_mic,default_speaker
 
-if __name__ == '__main__':
-    mic,speaker = get_default()
-    pprint.pprint(mic)
-    pprint.pprint(speaker)
