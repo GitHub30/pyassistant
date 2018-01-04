@@ -6,7 +6,7 @@ if [ -e $DETECT ]; then
     echo "snowboy is already installed"
 else
     echo "install snowboy"
-    sudo apt-get install -y git python-pyaudio python3-pyaudio swig3.0 libatlas-base-dev
+    sudo apt-get install -y git portaudio19-dev python-pyaudio python3-pyaudio swig libatlas-base-dev
     cd $SCRIPT_DIR/
     git clone https://github.com/Kitt-AI/snowboy.git
     cd $SCRIPT_DIR/snowboy/swig/Python3

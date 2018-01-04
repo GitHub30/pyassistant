@@ -5,15 +5,17 @@ from assistant.slu.cognitive_luis import CognitiveLuis
 from assistant.tts.open_jtalk import OpenJtalk
 from assistant.hwd.snowboy import Snowboy
 import logging
+logging.basicConfig()
 logger = logging.getLogger('pi-assistant')
+logger.setLevel(logging.INFO)
 
 class PiAssistant(Assistant):
     def __init__(self):
         super().__init__()
 
     def conversation(self):
-        self.recorder = SoxRecorder()
         self.hwd = Snowboy()
+        self.recorder = SoxRecorder()
         self.asr = CognitiveSpeech(self.setting['COGNITIVE_SPEECH_KEY'])
         self.slu = CognitiveLuis(self.setting['COGNITIVE_LUIS_APPID'], self.setting['COGNITIVE_LUIS_APPKEY'])
         self.tts = OpenJtalk()
@@ -41,7 +43,6 @@ if __name__ == '__main__':
         for event,content in assistant.conversation():
             logger.info('------ [event] %s ------'%event)
             logger.info(content)
-
             if event == 'SLU_END':
                 assistant.say('こんにちは')
 

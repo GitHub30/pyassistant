@@ -61,20 +61,6 @@ class Snowboy():
 
         self.ring_buffer = RingBuffer(self.detector.NumChannels() * self.detector.SampleRate() * 5)
 
-    def __enter__(self):
-
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        print(exc_type)
-        print(exc_val)
-        print(exc_tb)
-
-        self.stream_in.stop_stream()
-        self.stream_in.close()
-        self.audio.terminate()
-
-        return True
 
     def start(self,sleep_time=0.03):
 
@@ -93,18 +79,23 @@ class Snowboy():
             frames_per_buffer=2048,
             stream_callback=audio_callback)
 
-        self.hotword = ''
+        self.hotword = None
 
         while True:
             data = self.ring_buffer.get()
             if len(data) == 0:
                 time.sleep(sleep_time)
-                continue
 
             ans = self.detector.RunDetection(data)
             if ans == -1:
                 raise("Error initializing streams or reading audio data")
+                break
             elif ans > 0:
                 self.hotword = ans
+                break
+
+        self.stream_in.stop_stream()
+        self.stream_in.close()
+        self.audio.terminate()
 
         return self.hotword
