@@ -5,6 +5,11 @@ class CognitiveLuis():
         self.appid = appid
         self.appkey = appkey
 
+        if self.appid == '':
+            raise Exception('COGNITIVE_LUIS_APPID is empty')
+        if self.appkey == '':
+            raise Exception('COGNITIVE_LUIS_APPKEY is empty')
+
     def understand(self,text):
         client = LUISClient(self.appid, self.appkey, True)
         res = client.predict(text)

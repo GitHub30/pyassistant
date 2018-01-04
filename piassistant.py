@@ -3,7 +3,9 @@ from assistant.asr.cognitive_speech import CognitiveSpeech
 from assistant.util.assistant import Assistant
 from assistant.slu.cognitive_luis import CognitiveLuis
 from assistant.tts.open_jtalk import OpenJtalk
-
+from assistant.hwd.snowboy import Snowboy
+import logging
+logger = logging.getLogger('pi-assistant')
 
 class PiAssistant(Assistant):
     def __init__(self):
@@ -11,11 +13,14 @@ class PiAssistant(Assistant):
 
     def conversation(self):
         self.recorder = SoxRecorder()
+        self.hwd = Snowboy()
         self.asr = CognitiveSpeech(self.setting['COGNITIVE_SPEECH_KEY'])
         self.slu = CognitiveLuis(self.setting['COGNITIVE_LUIS_APPID'], self.setting['COGNITIVE_LUIS_APPKEY'])
         self.tts = OpenJtalk()
         while True:
             yield ('CONVERSATION_START',None)
+            hotword = self.hwd.start()
+            yield ('DETECT_HOTWORD', hotword)
             file = self.recorder.record()
             yield ('USER_SPEECH_END',file)
 
@@ -34,8 +39,9 @@ class PiAssistant(Assistant):
 if __name__ == '__main__':
     with PiAssistant() as assistant:
         for event,content in assistant.conversation():
-            print(event)
-            print(content)
+            logger.info('------ [event] %s ------'%event)
+            logger.info(content)
+
             if event == 'SLU_END':
                 assistant.say('こんにちは')
 

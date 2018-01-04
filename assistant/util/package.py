@@ -1,17 +1,18 @@
 import subprocess
-
+import logging
+logger = logging.getLogger('pi-assistant')
 
 def install(command,init):
     try:
         proc = subprocess.Popen(command.split(' '),stderr=subprocess.PIPE, stdout=subprocess.PIPE)
         res = proc.communicate()
     except FileNotFoundError:
-        print('package %s is not found'%command)
-        print('install %s'%init)
+        logger.info('package %s is not found'%command)
+        logger.info('install %s'%init)
         subprocess.call(init.split(' '))
 
     try:
         proc = subprocess.Popen(command.split(' '), stderr=subprocess.PIPE, stdout=subprocess.PIPE)
         res = proc.communicate()
     except FileNotFoundError:
-        print('command %s could not installed by this command %s'%(command,init))
+        logger.error('command %s could not installed by this command %s'%(command,init))

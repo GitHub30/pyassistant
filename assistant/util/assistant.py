@@ -1,5 +1,7 @@
 import os
 import json
+import logging
+logger = logging.getLogger('pi-assistant')
 
 class Assistant():
 
@@ -22,9 +24,9 @@ class Assistant():
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        print(exc_type)
-        print(exc_val)
-        print(exc_tb)
+        logger.error(exc_type)
+        logger.error(exc_val)
+        logger.error(exc_tb)
         with open(self.setting_file, 'w') as f:
             json.dump(self.setting,f)
 
