@@ -1,5 +1,7 @@
 import unittest
-from assistant.piassistant import Assistant
+
+from piassistant import Assistant
+
 
 class TestAssistant(unittest.TestCase):
 
