@@ -1,43 +1,11 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <title></title>
-
+    <meta charset="utf-8">
+    <title>ui</title>
   </head>
   <body>
-
-    <button id="btn_mute">MUTE</button>
-    <button id="btn_unmute">UNMUTE</button>
-
-    <button id="btn_restart">RESTART</button>
-
-  <script language="javascript">
-        var host = location.hostname;
-        console.log(host);
-          var ws = new WebSocket("ws://"+host+":8000/ws");
-          ws.onopen = function() {
-          };
-          ws.onmessage = function (evt) {
-           document.write("<strong>" + evt.data + "</strong>");
-          };
-
-          document.getElementById('btn_mute').onclick = function(){
-              msg = {command:'ASSISTANT_MUTE_START',detail:''}
-              msgStr = JSON.stringify(msg)
-              ws.send(msgStr)
-          };
-
-          document.getElementById('btn_unmute').onclick = function(){
-              msg = {command:'ASSISTANT_MUTE_STOP',detail:''}
-              msgStr = JSON.stringify(msg)
-              ws.send(msgStr)
-          };
-
-
-          document.getElementById('btn_restart').onclick = function(){
-              msg = {command:'ASSISTANT_RESTART',detail:''}
-              msgStr = JSON.stringify(msg)
-              ws.send(msgStr)
-          };
-    </script>
+    <div id="app"></div>
+    <script src="/static/build.js"></script>
   </body>
 </html>

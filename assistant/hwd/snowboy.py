@@ -1,20 +1,28 @@
 import os
 import subprocess
+import sys
+
+import logging
+logging.basicConfig()
+logger = logging.getLogger('pi-assistant')
+logger.setLevel(logging.INFO)
 
 dir_path = os.path.abspath(os.path.dirname(__file__))
-target = os.path.join(dir_path,'snowboydetect.py')
 resource = os.path.join(dir_path,'common.res')
 setup = os.path.join(dir_path,'setup.sh')
 
-if not os.path.exists(target):
-    subprocess.call(setup)
+if sys.platform.startswith('linux'):
+    if not os.path.exists(resource):
+        subprocess.call(setup)
+    from . import snowboydetect
+
+else:
+    logger.warning('snowboy can support only linux platform')
 
 import pyaudio
 import time
 import wave
 import collections
-from . import snowboydetect
-
 
 
 class RingBuffer(object):

@@ -31,4 +31,4 @@ class Assistant():
         with open(self.setting_file, 'w') as f:
             json.dump(self.setting,f)
 
-        return True
+        return False

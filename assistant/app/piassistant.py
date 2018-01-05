@@ -40,7 +40,7 @@ class PiAssistant(Assistant):
 
             if hotword == None:
                 continue
-                
+
             yield ('DETECT_HOTWORD', hotword)
             file = self.recorder.record()
             yield ('USER_SPEECH_END',file)

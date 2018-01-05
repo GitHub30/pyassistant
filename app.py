@@ -6,6 +6,7 @@ import os
 import json
 from assistant.app.piassistant import PiAssistant
 import threading
+import click
 
 import logging
 logging.basicConfig()
@@ -17,16 +18,6 @@ agent_thread = None
 
 clients = []
 
-def start_assistant():
-    global agent
-
-    while True:
-        with PiAssistant() as agent:
-            for event, content in agent.conversation():
-                logger.info('------ [event] %s ------' % event)
-                logger.info(content)
-                if event == 'SLU_END':
-                    agent.say('こんにちは')
 
 
 def process_command(command,detail):
@@ -78,9 +69,29 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             clients.remove(self)
 
 
+def start_assistant():
+    global agent
 
-if __name__ == '__main__':
-    assistant_thread = threading.Thread(target=start_assistant)
+    while True:
+        try:
+            agent = PiAssistant()
+            for event, content in agent.conversation():
+                logger.info('------ [event] %s ------' % event)
+                logger.info(content)
+                if event == 'SLU_END':
+                    agent.say('こんにちは')
+        except Exception as e:
+            logger.error('Assistant raises following error!')
+            logger.error(e.args)
+            break
+
+
+@click.command()
+@click.option('--port','-p',default=8000)
+def __main(port):
+    option = {
+    }
+    assistant_thread = threading.Thread(target=start_assistant,kwargs=option)
     assistant_thread.start()
 
     settings = {
@@ -90,9 +101,17 @@ if __name__ == '__main__':
     app = tornado.web.Application([
         (r'/', IndexHandler),
         (r'/ws', SocketHandler),
-    ],**settings)
-    app.listen(8000)
+    ], **settings)
+    app.listen(port)
+    logger.info('Assistant webUI listening at port %d'%port)
     tornado.ioloop.IOLoop.instance().start()
+
+
+if __name__ == '__main__':
+    try:
+        __main()
+    except KeyboardInterrupt:
+        logger.info('finish')
 
 
 
