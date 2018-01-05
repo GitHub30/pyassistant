@@ -14,9 +14,16 @@ class PiAssistant(Assistant):
     def __init__(self):
         super().__init__()
         self.__is_active = True
+        self.__is_mute = False
 
     def stop(self):
         self.__is_active = False
+
+    def set_mute(self,mute):
+        self.__is_mute = mute
+
+    def get_mute(self):
+        return self.__is_mute
 
     def is_active(self):
         return self.__is_active
@@ -29,7 +36,11 @@ class PiAssistant(Assistant):
         self.tts = OpenJtalk()
         while self.__is_active:
             yield ('CONVERSATION_START',None)
-            hotword = self.hwd.start(lambda :self.__is_active)
+            hotword = self.hwd.start(lambda :self.__is_active,lambda :self.__is_mute)
+
+            if hotword == None:
+                continue
+                
             yield ('DETECT_HOTWORD', hotword)
             file = self.recorder.record()
             yield ('USER_SPEECH_END',file)

@@ -19,35 +19,44 @@ clients = []
 
 def start_assistant():
     global agent
-    with PiAssistant() as agent:
-        for event, content in agent.conversation():
-            logger.info('------ [event] %s ------' % event)
-            logger.info(content)
-            if event == 'SLU_END':
-                agent.say('こんにちは')
-                agent.stop()
+
+    while True:
+        with PiAssistant() as agent:
+            for event, content in agent.conversation():
+                logger.info('------ [event] %s ------' % event)
+                logger.info(content)
+                if event == 'SLU_END':
+                    agent.say('こんにちは')
 
 
 def process_command(command,detail):
     global agent
     global agent_thread
 
-    if command == 'ASSISTANT_START':
-        if agent.is_active():
+    if command == 'ASSISTANT_RESTART':
+        agent.say('再起動します')
+        if agent != None and agent.is_active():
             agent.stop()
-        assistant_thread = threading.Thread(target=start_assistant)
-        assistant_thread.start()
-        agent.say('起動しました')
 
-    if command == 'ASSISTANT_STOP':
-        if agent.is_active():
-            agent.stop()
-        agent.say('終了しました')
+        print('restart')
+    if command == 'ASSISTANT_MUTE_START':
+
+        if agent != None and agent.is_active():
+            agent.set_mute(True)
+            agent.say('マイクはオフです')
+            print('mute on')
+
+    if command == 'ASSISTANT_MUTE_STOP':
+
+        if agent != None and agent.is_active():
+            agent.set_mute(False)
+            agent.say('マイクはオンです')
+            print('mute off')
 
 
 class IndexHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render("/static/index.html")
+        self.render("static/index.html")
 
 
 
@@ -59,9 +68,10 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
             clients.append(self)
 
     def on_message(self,msg):
-        msg = json.loads(msg)
-        process_command(msg.command,msg.detail)
         print(msg)
+        msg = json.loads(msg)
+        process_command(msg['command'],msg['detail'])
+
 
     def on_close(self):
         if self in clients:
@@ -70,6 +80,8 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
 
 
 if __name__ == '__main__':
+    assistant_thread = threading.Thread(target=start_assistant)
+    assistant_thread.start()
 
     settings = {
         "static_path": os.path.join(os.path.dirname(__file__), "static"),
