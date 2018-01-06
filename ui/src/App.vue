@@ -39,14 +39,13 @@
       <v-toolbar-side-icon @click.stop="navBar = !navBar"></v-toolbar-side-icon>
       <v-toolbar-title class="white--text">{{title}}</v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-slider thumb-label dark prepend-icon="volume_up" v-model="volume" v-bind:label="volume"></v-slider>
+
       <v-btn v-if="isMute" icon v-on:click="setMute(false)">
         <v-icon>mic_off</v-icon>
       </v-btn>
       <v-btn v-else icon v-on:click="setMute(true)">
         <v-icon>mic</v-icon>
-      </v-btn>
-      <v-btn icon>
-        <v-icon>apps</v-icon>
       </v-btn>
       <v-btn icon>
         <v-icon>refresh</v-icon>
@@ -83,12 +82,13 @@
         navBar: null,
         title: '',
         isMute: false,
-        notifySnack:{
-          show:false,
-          color:'info',
-          timeout:'6000',
-          text:''
-        }
+        notifySnack: {
+          show: false,
+          color: 'info',
+          timeout: '6000',
+          text: ''
+        },
+        volume: 70
       }
     },
     watch: {
@@ -101,53 +101,83 @@
       let inst = this;
       this.$ws.addEventListener('open', function () {
         console.log('on open');
+        let command = {
+          command: 'GET_VOLUME',
+          detail: {}
+        }
+        inst.$ws.send(JSON.stringify(command));
       });
 
       this.$ws.addEventListener('message', function (msg) {
-          let data = JSON.parse(msg.data);
-          if(data.command==='ASSISTANT_MUTE'){
+        let data = JSON.parse(msg.data);
+        if (data.command === 'ASSISTANT_MUTE') {
 
-              if(data.detail.isMute){
+          if (data.detail.isMute) {
 
-                inst.showNotify({
-                  color:'info',
-                  text:'マイクはオフです'
-                });
-              }else{
-                inst.showNotify({
-                  color:'info',
-                  text:'マイクはオンです'
-                });
-              }
-          }
-
-          if(data.command==='ASSISTANT_ERROR'){
             inst.showNotify({
-                  color:'error',
-                  text:'エラーが発生しました ['+data.detail.message+']'
-                });
+              color: 'info',
+              text: 'マイクはオフです'
+            });
+          } else {
+            inst.showNotify({
+              color: 'info',
+              text: 'マイクはオンです'
+            });
           }
+        }
+
+        if (data.command === 'GET_VOLUME') {
+          inst.volume = data.detail.volume;
+        }
+
+        if (data.command === 'SET_VOLUME') {
+          inst.showNotify({
+            color: 'info',
+            text: 'set volume [' + data.detail.volume + ']'
+          });
+        }
+
+        if (data.command === 'ASSISTANT_ERROR') {
+          inst.showNotify({
+            color: 'error',
+            text: 'エラーが発生しました [' + data.detail.message + ']'
+          });
+        }
+
+
       });
+
 
     },
     destroyed: function () {
 
     },
-    methods:{
-        setMute:function(isMute){
-          this.isMute = isMute
-          let command = {
-              command:'ASSISTANT_MUTE',
-              detail:{
-                  'isMute':isMute
-              }
+    methods: {
+      setMute: function (isMute) {
+        this.isMute = isMute
+        let command = {
+          command: 'ASSISTANT_MUTE',
+          detail: {
+            'isMute': isMute
           }
-          this.$ws.send(JSON.stringify(command));
-        },
-        showNotify:function(prop){
-            this.notifySnack.color = prop.color;
-            this.notifySnack.text = prop.text;
-            this.notifySnack.show = true;
+        }
+        this.$ws.send(JSON.stringify(command));
+      },
+      showNotify: function (prop) {
+        this.notifySnack.color = prop.color;
+        this.notifySnack.text = prop.text;
+        this.notifySnack.show = true;
+      }
+    },
+    watch:{
+        volume:function(){
+            let command = {
+              command: 'SET_VOLUME',
+              detail: {
+                  'volume':this.volume
+              }
+            }
+            this.$ws.send(JSON.stringify(command));
         }
     }
   }
@@ -158,8 +188,8 @@
     text-decoration: none;
   }
 
-  .card{
-    min-height:200px;
+  .card {
+    min-height: 200px;
   }
 
 </style>

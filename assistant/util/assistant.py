@@ -8,8 +8,6 @@ class Assistant():
 
     def __init__(self):
         self.home = os.environ['HOME']
-
-    def __enter__(self):
         self.config_dir = os.path.join(self.home, '.pi-assistant')
         if not os.path.exists(self.config_dir):
             os.mkdir(self.config_dir)
@@ -21,6 +19,9 @@ class Assistant():
         else:
             self.setting = {
             }
+
+    def __enter__(self):
+
 
         return self
 

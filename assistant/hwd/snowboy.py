@@ -78,13 +78,16 @@ class Snowboy():
             return play_data, pyaudio.paContinue
 
         self.audio = pyaudio.PyAudio()
+        self.audio.get_default_input_device_info()
 
-        device_index = 0
+        default_input_index = 0
+        default_output_index = 0
         api_count = self.audio.get_host_api_count()
-        for i in api_count:
+        for i in range(api_count):
             info = self.audio.get_host_api_info_by_index(i)
             if info['name'] == 'ALSA':
-                device_index = int(info['index'])
+                default_input_index = info['defaultInputDevice']
+                default_output_index = info['defaultOutputDevice']
 
         self.stream_in = self.audio.open(
             input=True, output=False,
@@ -94,8 +97,8 @@ class Snowboy():
             rate=self.detector.SampleRate(),
             frames_per_buffer=2048,
             stream_callback=audio_callback,
-            input_device_index = device_index,
-            output_device_index = device_index
+            input_device_index = default_input_index,
+            output_device_index = default_output_index
         )
 
         self.hotword = None

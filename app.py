@@ -7,6 +7,8 @@ import json
 from assistant.app.piassistant import PiAssistant
 import threading
 import click
+import assistant.util.alsa as alsa
+import traceback
 
 import logging
 logging.basicConfig()
@@ -44,6 +46,21 @@ def process_command(command,detail):
             'isMute':detail['isMute']
         }
         return res
+
+    if command == 'GET_VOLUME':
+        mic,speaker = alsa.get_default()
+        vol = alsa.get_current_volume(int(speaker['card_id']))
+        return {
+            'volume':vol
+        }
+
+    if command == 'SET_VOLUME':
+        mic, speaker = alsa.get_default()
+        alsa.set_current_volume(int(speaker['card_id']),int(detail['volume']))
+        vol = alsa.get_current_volume(int(speaker['card_id']))
+        return {
+            'volume':vol
+        }
 
     return None
 
@@ -83,6 +100,8 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
                 }
             }
             self.write_message(json.dumps(res_msg))
+            logger.error(e.args[0])
+            logger.error(traceback.format_exc())
 
     def on_close(self):
         print('close')
@@ -103,7 +122,8 @@ def start_assistant():
                     agent.say('こんにちは')
         except Exception as e:
             logger.error('Assistant raises following error!')
-            logger.error(e.args)
+            logger.error(e.args[0])
+            logger.error(traceback.format_exc())
             break
 
 
