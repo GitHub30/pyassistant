@@ -1,6 +1,6 @@
 import subprocess
 import re
-import pprint
+import os
 
 
 def list_device():
@@ -125,3 +125,113 @@ def get_default():
 
     return default_mic,default_speaker
 
+def set_default(mic_card_id,mic_device_id,speaker_card_id,speaker_device_id):
+    home = os.environ['HOME']
+    asoundrc = os.path.join(home,'.asoundrc')
+
+    template = """
+    pcm.!default {
+      type asym
+       playback.pcm {
+         type plug
+         slave.pcm "hw:%d,%d"
+       }
+       capture.pcm {
+         type plug
+         slave.pcm "hw:%d,%d"
+       }
+    }
+    """%(speaker_card_id,speaker_device_id,mic_card_id,mic_device_id)
+
+    with open(asoundrc,'w') as f:
+        f.write(template)
+
+
+def get_mixer_controls(card_id):
+    command = 'amixer -c %d scontrols'%(card_id)
+    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    stdout = p.stdout.read().decode('utf-8')
+    controls = []
+    for o in stdout.split('\n'):
+        if o.count("'") > 0:
+            cols = o.split("'")
+            controls.append(cols[1])
+    return controls
+
+def get_current_volume_list(card_id):
+    controls = get_mixer_controls(card_id)
+    results = {}
+    for control in controls:
+        command = 'amixer -c %d get %s' % (card_id,control)
+        p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        stdout = p.stdout.read().decode('utf-8')
+        control_volumes = {}
+        pattern = r".*: .*\[\d*%\].*"
+
+        for o in stdout.split('\n'):
+            if re.search(pattern,o):
+
+                channel = re.search(r".*: ",o).group().lstrip(' ').rstrip(' ').rstrip(':')
+                m = re.compile(r"\[\d*%\]")
+                volume = m.search(o).group().lstrip('[').rstrip(']').rstrip('%')
+                control_volumes[channel]={
+                    'volume':int(volume)
+                }
+        if len(control_volumes)>0:
+            results[control] = control_volumes
+
+    return results
+
+def get_current_volume(card_id):
+    volumes = get_current_volume_list(card_id)
+    volume = None
+    for k in volumes.keys():
+        control = volumes[k]
+        for k2 in control.keys():
+            volume = control[k2]['volume']
+        break
+
+    return volume
+
+
+def set_current_volume(card_id,volume):
+    controls = get_mixer_controls(card_id)
+    for control in controls:
+        command = 'amixer -c %s set %s %d' % (card_id, control,volume)
+        command += '%'
+        subprocess.check_call(command.split(' '))
+
+
+def use_output_line():
+    command = 'amixer cset numid=3 1'
+    subprocess.call(command.split(' '))
+
+def use_output_hdmi():
+    command = 'amixer cset numid=3 2'
+    subprocess.call(command.split(' '))
+
+def get_output_line():
+    command = 'amixer contents'
+    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    stdout = p.stdout.read().decode('utf-8')
+
+    is_three = False
+    value = None
+    for o in stdout.split('\n'):
+        if o.count('numid=3,') > 0:
+            is_three=True
+            continue
+        if o.count('  : values=')>0 and is_three:
+            value = int(o.replace('  : values=',''))
+            break
+
+    line = None
+    if value == 1:
+        line = 'LINE'
+    elif value == 2:
+        line = 'HDMI'
+    return line
+
+if __name__ == '__main__':
+    import pprint
+    pprint.pprint(get_output_line())
