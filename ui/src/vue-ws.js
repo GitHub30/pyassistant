@@ -10,9 +10,7 @@ export default{
 
       },
       destroyed:function(){
-        if(Vue.prototype.$ws.readyState === 1) {
-          Vue.prototype.$ws.close();
-        }
+
       }
     });
   }

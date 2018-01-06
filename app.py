@@ -30,19 +30,24 @@ def process_command(command,detail):
             agent.stop()
 
         print('restart')
-    if command == 'ASSISTANT_MUTE_START':
-
-        if agent != None and agent.is_active():
+    if command == 'ASSISTANT_MUTE':
+        if detail['isMute']:
             agent.set_mute(True)
             agent.say('マイクはオフです')
-            print('mute on')
-
-    if command == 'ASSISTANT_MUTE_STOP':
-
-        if agent != None and agent.is_active():
+            logger.info('mute on')
+        else:
             agent.set_mute(False)
             agent.say('マイクはオンです')
-            print('mute off')
+            logger.info('mute off')
+
+        res =  {
+            'isMute':detail['isMute']
+        }
+        return res
+
+    return None
+
+
 
 
 class IndexHandler(tornado.web.RequestHandler):
@@ -61,10 +66,26 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
     def on_message(self,msg):
         print(msg)
         msg = json.loads(msg)
-        process_command(msg['command'],msg['detail'])
+        try:
+            res = process_command(msg['command'],msg['detail'])
 
+            if res:
+                res_msg = {
+                    'command':msg['command'],
+                    'detail':res
+                }
+                self.write_message(json.dumps(res_msg))
+        except Exception as e:
+            res_msg = {
+                'command': 'ASSISTANT_ERROR',
+                'detail': {
+                    'message':e.args
+                }
+            }
+            self.write_message(json.dumps(res_msg))
 
     def on_close(self):
+        print('close')
         if self in clients:
             clients.remove(self)
 
