@@ -5,7 +5,7 @@ import sys
 import logging
 logging.basicConfig()
 logger = logging.getLogger('pi-assistant')
-logger.setLevel(logging.INFO)
+
 
 dir_path = os.path.abspath(os.path.dirname(__file__))
 resource = os.path.join(dir_path,'common.res')
@@ -43,7 +43,7 @@ class RingBuffer(object):
 
 class Snowboy():
 
-    def __init__(self, decoder_model = os.path.join(dir_path,'helloraspi.pmdl'),sensitivity=[],audio_gain=1):
+    def __init__(self, decoder_model = os.path.join(dir_path,'../resource/helloraspi.pmdl'),sensitivity=[],audio_gain=1):
 
         tm = type(decoder_model)
         ts = type(sensitivity)

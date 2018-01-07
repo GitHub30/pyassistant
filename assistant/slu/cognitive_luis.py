@@ -2,7 +2,7 @@ from luis_sdk import LUISClient
 import logging
 logging.basicConfig()
 logger = logging.getLogger('pi-assistant')
-logger.setLevel(logging.INFO)
+
 
 
 class CognitiveLuis():

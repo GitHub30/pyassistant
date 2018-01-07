@@ -5,11 +5,11 @@ from assistant.slu.cognitive_luis import CognitiveLuis
 from assistant.tts.open_jtalk import OpenJtalk
 from assistant.trigger.snowboy import Snowboy
 from assistant.trigger.button_trigger import ButtonTrigger
+import subprocess
 
 import logging
 logging.basicConfig()
 logger = logging.getLogger('pi-assistant')
-logger.setLevel(logging.INFO)
 
 class PiAssistant(Assistant):
     def __init__(self):

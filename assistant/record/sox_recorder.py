@@ -5,7 +5,6 @@ import assistant.util.alsa as alsa
 import logging
 logging.basicConfig()
 logger = logging.getLogger('pi-assistant')
-logger.setLevel(logging.INFO)
 
 class SoxRecorder():
 

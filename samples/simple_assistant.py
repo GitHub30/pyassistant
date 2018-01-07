@@ -7,7 +7,7 @@ from assistant.trigger.snowboy import Snowboy
 import logging
 logging.basicConfig()
 logger = logging.getLogger('pi-assistant')
-logger.setLevel(logging.INFO)
+
 
 class PiAssistant(Assistant):
     def __init__(self):
