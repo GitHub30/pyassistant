@@ -30,8 +30,7 @@ def process_command(command,detail):
         agent.say('再起動します')
         if agent != None and agent.is_active():
             agent.stop()
-
-        print('restart')
+        return {}
     if command == 'ASSISTANT_MUTE':
         if detail['isMute']:
             agent.set_mute(True)
@@ -62,6 +61,16 @@ def process_command(command,detail):
             'volume':vol
         }
 
+    if command == 'GET_ASSISTANT_SETTING':
+        setting = agent.setting
+        return {
+            'setting':setting
+        }
+
+    if command == 'SET_ASSISTANT_SETTING':
+        agent.setting = detail['setting']
+        return {}
+
     return None
 
 
@@ -86,7 +95,7 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
         try:
             res = process_command(msg['command'],msg['detail'])
 
-            if res:
+            if res != None:
                 res_msg = {
                     'command':msg['command'],
                     'detail':res

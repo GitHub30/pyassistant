@@ -6,7 +6,7 @@ import VueWs from './vue-ws.js'
 
 Vue.use(VueRouter);
 Vue.use(Vuetify)
-
+Vue.config.debug = true; Vue.config.devtools = true;
 
 let url = 'ws://' + location.hostname + ':' + location.port + '/ws';
 Vue.use(VueWs,url)

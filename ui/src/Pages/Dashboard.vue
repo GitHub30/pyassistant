@@ -55,6 +55,45 @@
 
 </template>
 
+<script>
+
+  export default {
+    name: 'app',
+    data () {
+      return {
+        setting:{
+
+        }
+      }
+    },
+    watch: {
+
+    },
+    mounted: function () {
+      let inst = this;
+      this.$ws.addEventListener('open', function () {
+
+      });
+
+      this.$ws.addEventListener('message', function (msg) {
+        let data = JSON.parse(msg.data);
+
+
+      });
+
+
+    },
+    destroyed: function () {
+
+    },
+    methods: {
+
+    },
+    watch: {
+
+    }
+  }
+</script>
 
 <style>
 

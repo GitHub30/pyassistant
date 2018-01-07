@@ -39,7 +39,8 @@
       <v-toolbar-side-icon @click.stop="navBar = !navBar"></v-toolbar-side-icon>
       <v-toolbar-title class="white--text">{{title}}</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-slider thumb-label dark prepend-icon="volume_up" v-model="volume" v-bind:label="volume"></v-slider>
+      <v-slider thumb-label dark prepend-icon="volume_up" v-model="volume" v-on:blur="setVolume(volume)" v-bind:label="volume" color="pink"
+                thumbColor="pink"></v-slider>
 
       <v-btn v-if="isMute" icon v-on:click="setMute(false)">
         <v-icon>mic_off</v-icon>
@@ -47,18 +48,12 @@
       <v-btn v-else icon v-on:click="setMute(true)">
         <v-icon>mic</v-icon>
       </v-btn>
-      <v-btn icon>
-        <v-icon>refresh</v-icon>
-      </v-btn>
-      <v-btn icon>
-        <v-icon>more_vert</v-icon>
-      </v-btn>
 
     </v-toolbar>
     <v-content>
       <v-container fluid fill-height>
         <v-fade-transition mode="out-in">
-          <router-view></router-view>
+          <router-view v-on:showNotify="showNotify"></router-view>
         </v-fade-transition>
       </v-container>
     </v-content>
@@ -137,6 +132,13 @@
           });
         }
 
+        if (data.command === 'ASSISTANT_RESTART') {
+          inst.showNotify({
+            color: 'info',
+            text: 'assistant restart complete'
+          });
+        }
+
         if (data.command === 'ASSISTANT_ERROR') {
           inst.showNotify({
             color: 'error',
@@ -167,18 +169,26 @@
         this.notifySnack.color = prop.color;
         this.notifySnack.text = prop.text;
         this.notifySnack.show = true;
+      },
+      assistantRestart: function () {
+        let command = {
+          command: 'ASSISTANT_RESTART',
+          detail: {}
+        }
+        this.$ws.send(JSON.stringify(command));
+      },
+      setVolume(vol){
+          this.volume = vol;
+          let command = {
+            command: 'SET_VOLUME',
+            detail: {
+              'volume': this.volume
+            }
+          }
+        this.$ws.send(JSON.stringify(command));
       }
     },
-    watch:{
-        volume:function(){
-            let command = {
-              command: 'SET_VOLUME',
-              detail: {
-                  'volume':this.volume
-              }
-            }
-            this.$ws.send(JSON.stringify(command));
-        }
+    watch: {
     }
   }
 </script>

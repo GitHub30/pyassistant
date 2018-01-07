@@ -11,7 +11,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.css$/,
+        test: /\.(css|styl)$/,
         use: [
           'vue-style-loader',
           'css-loader'
