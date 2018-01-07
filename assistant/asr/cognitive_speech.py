@@ -1,6 +1,11 @@
 import urllib.request as request
 import uuid
 import json
+import logging
+logging.basicConfig()
+logger = logging.getLogger('pi-assistant')
+logger.setLevel(logging.INFO)
+
 
 
 class CognitiveSpeech():
@@ -8,7 +13,7 @@ class CognitiveSpeech():
     def __init__(self,key):
         self.key = key
         if self.key == '':
-            raise Exception('COGNITIVE_SPEECH_KEY is empty')
+            logger.warning('COGNITIVE_SPEECH_KEY is empty')
         self.lang = 'ja-JP'
         self.sampling_rate = 16000
 

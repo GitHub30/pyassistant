@@ -62,13 +62,13 @@ def process_command(command,detail):
         }
 
     if command == 'GET_ASSISTANT_SETTING':
-        setting = agent.setting
+        setting = agent.get_setting()
         return {
             'setting':setting
         }
 
     if command == 'SET_ASSISTANT_SETTING':
-        agent.setting = detail['setting']
+        agent.set_setting(detail['setting'])
         return {}
 
     return None
@@ -123,12 +123,12 @@ def start_assistant():
 
     while True:
         try:
-            agent = PiAssistant()
-            for event, content in agent.conversation():
-                logger.info('------ [event] %s ------' % event)
-                logger.info(content)
-                if event == 'SLU_END':
-                    agent.say('こんにちは')
+            with PiAssistant() as agent:
+                for event, content in agent.conversation():
+                    logger.info('------ [event] %s ------' % event)
+                    logger.info(content)
+                    if event == 'SLU_END':
+                        agent.say('こんにちは')
         except Exception as e:
             logger.error('Assistant raises following error!')
             logger.error(e.args[0])

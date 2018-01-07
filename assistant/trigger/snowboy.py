@@ -121,4 +121,7 @@ class Snowboy():
         self.stream_in.close()
         self.audio.terminate()
 
-        return self.hotword
+        result = False
+        if self.hotword:
+            result = True
+        return result

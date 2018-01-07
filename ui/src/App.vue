@@ -6,24 +6,14 @@
       app
       v-model="navBar"
     >
-      <v-list dense class="pt-0">
-        <router-link to="/">
+      <v-list v-for="route in this.$router.options.routes" dense class="pt-0">
+        <router-link v-bind:to="route.path">
           <v-list-tile>
             <v-list-tile-action>
-              <v-icon>dashboard</v-icon>
+              <v-icon>{{route.icon}}</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
-              <v-list-tile-title>DASHBOARD</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </router-link>
-        <router-link to="/setting">
-          <v-list-tile>
-            <v-list-tile-action>
-              <v-icon>settings</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>SETTING</v-list-tile-title>
+              <v-list-tile-title>{{route.name}}</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
         </router-link>
@@ -37,7 +27,7 @@
       app
     >
       <v-toolbar-side-icon @click.stop="navBar = !navBar"></v-toolbar-side-icon>
-      <v-toolbar-title class="white--text">{{title}}</v-toolbar-title>
+      <v-toolbar-title class="white--text">Pi Assistant - {{title}}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-slider thumb-label dark prepend-icon="volume_up" v-model="volume" v-on:blur="setVolume(volume)" v-bind:label="volume" color="pink"
                 thumbColor="pink"></v-slider>
@@ -187,8 +177,6 @@
           }
         this.$ws.send(JSON.stringify(command));
       }
-    },
-    watch: {
     }
   }
 </script>
@@ -199,7 +187,7 @@
   }
 
   .card {
-    min-height: 200px;
+    min-height: 150px;
   }
 
 </style>

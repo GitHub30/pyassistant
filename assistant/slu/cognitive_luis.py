@@ -1,4 +1,9 @@
 from luis_sdk import LUISClient
+import logging
+logging.basicConfig()
+logger = logging.getLogger('pi-assistant')
+logger.setLevel(logging.INFO)
+
 
 class CognitiveLuis():
     def __init__(self,appid,appkey):
@@ -6,9 +11,9 @@ class CognitiveLuis():
         self.appkey = appkey
 
         if self.appid == '':
-            raise Exception('COGNITIVE_LUIS_APPID is empty')
+            logger.warning('COGNITIVE_LUIS_APPID is empty')
         if self.appkey == '':
-            raise Exception('COGNITIVE_LUIS_APPKEY is empty')
+            logger.warning('COGNITIVE_LUIS_APPKEY is empty')
 
     def understand(self,text):
         client = LUISClient(self.appid, self.appkey, True)

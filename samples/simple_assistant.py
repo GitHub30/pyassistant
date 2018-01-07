@@ -3,7 +3,7 @@ from assistant.asr.cognitive_speech import CognitiveSpeech
 from assistant.util.assistant import Assistant
 from assistant.slu.cognitive_luis import CognitiveLuis
 from assistant.tts.open_jtalk import OpenJtalk
-from assistant.hwd.snowboy import Snowboy
+from assistant.trigger.snowboy import Snowboy
 import logging
 logging.basicConfig()
 logger = logging.getLogger('pi-assistant')

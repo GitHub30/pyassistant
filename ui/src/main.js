@@ -17,8 +17,8 @@ import dashboard from './Pages/Dashboard.vue'
 import setting from './Pages/Setting.vue'
 
 const routes = [
-  {name:'Dashboard',path:'/',component:dashboard},
-  {name:'Setting',path:'/setting',component:setting}
+  {name:'Dashboard',path:'/',component:dashboard,icon:'dashboard'},
+  {name:'Setting',path:'/setting',component:setting,icon:'settings'}
 ];
 
 const router = new VueRouter({
