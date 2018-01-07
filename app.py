@@ -138,7 +138,11 @@ def start_assistant():
 
 @click.command()
 @click.option('--port','-p',default=8000)
-def __main(port):
+@click.option('--debug','-d',default=0,type=int,help='enable debug mode if set 1')
+def __main(port,debug):
+    if debug >0:
+        logger.setLevel(logging.DEBUG)
+
     option = {
     }
     assistant_thread = threading.Thread(target=start_assistant,kwargs=option)
