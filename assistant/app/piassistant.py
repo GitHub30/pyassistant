@@ -5,7 +5,8 @@ from assistant.slu.cognitive_luis import CognitiveLuis
 from assistant.tts.open_jtalk import OpenJtalk
 from assistant.trigger.snowboy import Snowboy
 from assistant.trigger.button_trigger import ButtonTrigger
-import subprocess
+import assistant.util.process as process
+import os
 
 import logging
 logging.basicConfig()
@@ -37,6 +38,9 @@ class PiAssistant(Assistant):
         return self.setting
 
     def conversation(self):
+        trigger_on = os.path.join(os.path.dirname(__file__),'../resource/trigger_on.wav')
+        trigger_off = os.path.join(os.path.dirname(__file__), '../resource/trigger_off.wav')
+
         while self.__is_active:
             yield ('CONVERSATION_START',None)
             if self.setting['ACTIVATION_TRIGGER']['value']['value'] =='snowboy':
@@ -50,12 +54,15 @@ class PiAssistant(Assistant):
                 continue
 
             yield ('DETECT_HOTWORD', self.trigger)
+            process.call('aplay %s'%trigger_on)
+
             self.recorder = SoxRecorder()
             self.recorder.threshold = self.setting['RECORD_THRESHOLD']['value']
             self.recorder.start_second = self.setting['RECORD_BEGIN_SECOND']['value']
             self.recorder.end_seond = self.setting['RECORD_END_SECOND']['value']
             file = self.recorder.record()
             yield ('USER_SPEECH_END',file)
+            process.call('aplay %s' % trigger_off)
             self.asr = CognitiveSpeech(self.setting['COGNITIVE_SPEECH_KEY']['value'])
             text = self.asr.recognize(file)
             yield ('ASR_END', text)
