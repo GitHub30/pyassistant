@@ -78,7 +78,7 @@ class Snowboy():
             return play_data, pyaudio.paContinue
 
         self.audio = pyaudio.PyAudio()
-        self.audio.get_default_input_device_info()
+        #self.audio.get_default_input_device_info()
 
         default_input_index = 0
         default_output_index = 0
@@ -97,8 +97,8 @@ class Snowboy():
             rate=self.detector.SampleRate(),
             frames_per_buffer=2048,
             stream_callback=audio_callback,
-            input_device_index = default_input_index,
-            output_device_index = default_output_index
+            input_device_index = 5,
+            output_device_index = 5
         )
 
         self.hotword = None

@@ -1,10 +1,12 @@
-from assistant.record.sox_recorder import SoxRecorder
-from assistant.asr.cognitive_speech import CognitiveSpeech
-from assistant.util.assistant import Assistant
-from assistant.slu.cognitive_luis import CognitiveLuis
-from assistant.tts.open_jtalk import OpenJtalk
-from assistant.trigger.snowboy import Snowboy
 import logging
+
+from assistant import Assistant
+from assistant.asr.cognitive_speech import CognitiveSpeech
+from assistant.record.sox_recorder import SoxRecorder
+from assistant.slu.cognitive_luis import CognitiveLuis
+from assistant.trigger.snowboy import Snowboy
+from assistant.tts.open_jtalk import OpenJtalk
+
 logging.basicConfig()
 logger = logging.getLogger('pi-assistant')
 
