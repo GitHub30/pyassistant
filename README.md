@@ -1,4 +1,4 @@
-# Pi Assistant
+# PyAssistant
 Make your raspberry pi a smart speaker :speaker:
 
 ## ABILLITIES
