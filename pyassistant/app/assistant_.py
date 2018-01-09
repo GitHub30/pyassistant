@@ -2,9 +2,9 @@ import os
 import json
 import logging
 import traceback
-import assistant.util.alsa as alsa
-import assistant.util.process as process
-logger = logging.getLogger('pi-assistant')
+import pyassistant.util.alsa as alsa
+import pyassistant.util.process as process
+logger = logging.getLogger('pi-pyassistant')
 
 class Assistant():
 
@@ -12,7 +12,7 @@ class Assistant():
         self.home = os.environ['HOME']
         self.is_active = True
         self.is_mute = False
-        self.config_dir = os.path.join(self.home, '.pi-assistant')
+        self.config_dir = os.path.join(self.home, '.pi-pyassistant')
         self.on_sound_path = os.path.join(os.path.dirname(__file__), '../resource/trigger_on.wav')
         self.off_sound_path = os.path.join(os.path.dirname(__file__), '../resource/trigger_off.wav')
         if not os.path.exists(self.config_dir):

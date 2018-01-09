@@ -1,14 +1,14 @@
 import logging
 
-from assistant import Assistant
-from assistant.asr.cognitive_speech import CognitiveSpeech
-from assistant.record.sox_recorder import SoxRecorder
-from assistant.slu.cognitive_luis import CognitiveLuis
-from assistant.trigger.snowboy import Snowboy
-from assistant.tts.open_jtalk import OpenJtalk
+from pyassistant import Assistant
+from pyassistant.asr.cognitive_speech import CognitiveSpeech
+from pyassistant.record.sox_recorder import SoxRecorder
+from pyassistant.slu.cognitive_luis import CognitiveLuis
+from pyassistant.trigger.snowboy import Snowboy
+from pyassistant.tts.open_jtalk import OpenJtalk
 
 logging.basicConfig()
-logger = logging.getLogger('pi-assistant')
+logger = logging.getLogger('pi-pyassistant')
 
 
 class PiAssistant(Assistant):

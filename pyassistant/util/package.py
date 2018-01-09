@@ -1,6 +1,6 @@
 import subprocess
 import logging
-logger = logging.getLogger('pi-assistant')
+logger = logging.getLogger('pi-pyassistant')
 
 def install(command,init):
     try:

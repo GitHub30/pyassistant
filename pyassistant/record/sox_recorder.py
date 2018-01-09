@@ -1,10 +1,10 @@
-import assistant.util.package as package
+import pyassistant.util.package as package
 import subprocess
 import tempfile
-import assistant.util.alsa as alsa
+import pyassistant.util.alsa as alsa
 import logging
 logging.basicConfig()
-logger = logging.getLogger('pi-assistant')
+logger = logging.getLogger('pi-pyassistant')
 
 class SoxRecorder():
 

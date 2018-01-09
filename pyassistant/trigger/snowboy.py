@@ -4,7 +4,7 @@ import sys
 
 import logging
 logging.basicConfig()
-logger = logging.getLogger('pi-assistant')
+logger = logging.getLogger('pi-pyassistant')
 
 
 dir_path = os.path.abspath(os.path.dirname(__file__))

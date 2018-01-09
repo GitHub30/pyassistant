@@ -148,7 +148,7 @@
             inst.isUpdating = false;
             inst.$emit('showNotify', {
               color: 'info',
-              text: 'assistant save setting'
+              text: 'pyassistant save setting'
             })
           });
         });

@@ -1,6 +1,6 @@
 import subprocess
 import tempfile
-import assistant.util.package as package
+import pyassistant.util.package as package
 
 class OpenJtalk():
     def __init__(self):

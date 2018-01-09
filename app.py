@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import logging
 import click
-from assistant.app.piassistant import PiAssistant
+from pyassistant.app.pyassistant import PyAssistant
 
 logging.basicConfig()
-logger = logging.getLogger('pi-assistant')
+logger = logging.getLogger('pi-pyassistant')
 logger.setLevel(logging.INFO)
 
 @click.command()

@@ -3,7 +3,7 @@ import uuid
 import json
 import logging
 logging.basicConfig()
-logger = logging.getLogger('pi-assistant')
+logger = logging.getLogger('pi-pyassistant')
 
 
 

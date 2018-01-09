@@ -19,19 +19,19 @@ Make your raspberry pi a smart speaker :speaker:
 
 create virtual environment
 ```sh
-python3 -m venv ~/venv/pi-assistant
-source ~/venv/pi-assistant/bin/activate
+python3 -m venv ~/venv/pyassistant
+source ~/venv/pyassistant/bin/activate
 ```
 
 clone and install package
 ```sh
-git clone https://github.com/garicchi/pi-assistant.git
-cd pi-assistant
+git clone https://github.com/garicchi/pyassistant.git
+cd pyassistant
 pip install -r requirements.txt
 ```
 
 ## RUN ASSISTANT IN CONSOLE
 
 ```sh
-python piassistant.py
+python app.py
 ```

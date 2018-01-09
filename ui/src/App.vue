@@ -125,7 +125,7 @@
         if (data.command === 'ASSISTANT_RESTART') {
           inst.showNotify({
             color: 'info',
-            text: 'assistant restart complete'
+            text: 'pyassistant restart complete'
           });
         }
 
