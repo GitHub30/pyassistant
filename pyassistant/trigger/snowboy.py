@@ -4,7 +4,7 @@ import sys
 
 import logging
 logging.basicConfig()
-logger = logging.getLogger('pi-pyassistant')
+logger = logging.getLogger('pyassistant')
 
 
 dir_path = os.path.abspath(os.path.dirname(__file__))
@@ -78,7 +78,6 @@ class Snowboy():
             return play_data, pyaudio.paContinue
 
         self.audio = pyaudio.PyAudio()
-        #self.audio.get_default_input_device_info()
 
         default_input_index = 0
         default_output_index = 0
@@ -97,8 +96,8 @@ class Snowboy():
             rate=self.detector.SampleRate(),
             frames_per_buffer=2048,
             stream_callback=audio_callback,
-            input_device_index = 5,
-            output_device_index = 5
+            input_device_index = default_input_index,
+            output_device_index = default_output_index
         )
 
         self.hotword = None

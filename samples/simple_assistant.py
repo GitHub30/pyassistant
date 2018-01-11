@@ -8,10 +8,10 @@ from pyassistant.trigger.snowboy import Snowboy
 from pyassistant.tts.open_jtalk import OpenJtalk
 
 logging.basicConfig()
-logger = logging.getLogger('pi-pyassistant')
+logger = logging.getLogger('pyassistant')
 
 
-class PiAssistant(Assistant):
+class PyAssistant(Assistant):
     def __init__(self):
         super().__init__()
 
@@ -41,7 +41,7 @@ class PiAssistant(Assistant):
         self.tts.say(text)
 
 if __name__ == '__main__':
-    with PiAssistant() as assistant:
+    with PyAssistant() as assistant:
         for event,content in assistant.conversation():
             logger.info('------ [event] %s ------'%event)
             logger.info(content)

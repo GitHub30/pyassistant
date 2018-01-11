@@ -1,7 +1,7 @@
 from luis_sdk import LUISClient
 import logging
 logging.basicConfig()
-logger = logging.getLogger('pi-pyassistant')
+logger = logging.getLogger('pyassistant')
 
 
 

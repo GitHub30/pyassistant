@@ -4,7 +4,7 @@ import RPi.GPIO as GPIO
 import time
 import logging
 logging.basicConfig()
-logger = logging.getLogger('pi-pyassistant')
+logger = logging.getLogger('pyassistant')
 
 
 

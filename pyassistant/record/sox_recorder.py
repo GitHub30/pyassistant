@@ -4,7 +4,7 @@ import tempfile
 import pyassistant.util.alsa as alsa
 import logging
 logging.basicConfig()
-logger = logging.getLogger('pi-pyassistant')
+logger = logging.getLogger('pyassistant')
 
 class SoxRecorder():
 

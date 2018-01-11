@@ -4,15 +4,15 @@ import logging
 import traceback
 import pyassistant.util.alsa as alsa
 import pyassistant.util.process as process
-logger = logging.getLogger('pi-pyassistant')
+logger = logging.getLogger('pyassistant')
 
-class Assistant():
+class AssistantBase():
 
     def __init__(self):
         self.home = os.environ['HOME']
         self.is_active = True
         self.is_mute = False
-        self.config_dir = os.path.join(self.home, '.pi-pyassistant')
+        self.config_dir = os.path.join(self.home, '.pyassistant')
         self.on_sound_path = os.path.join(os.path.dirname(__file__), '../resource/trigger_on.wav')
         self.off_sound_path = os.path.join(os.path.dirname(__file__), '../resource/trigger_off.wav')
         if not os.path.exists(self.config_dir):
