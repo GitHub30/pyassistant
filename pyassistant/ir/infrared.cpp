@@ -95,8 +95,8 @@ vector<vector<int>> scan(int pin,int max_wait)
     while(1){
         int on = getTime(pin,0,max_wait);
         int off = getTime(pin,1,max_wait);
-        cout<<(".");
         vector<int> row = {on,off};
+        cout<<".";
 
         pulses.push_back(row);
         if(off > max_wait){ break; }
@@ -116,6 +116,7 @@ void send(vector<vector<int>> data,int pin,int repeat,int hz)
         cout<<"error wiringPi setup"<<endl;
         return;
     }
+    cout<<"send from GPIO "<<pin<<endl;
     // 送信（同じ情報をrepeat回送信する)
     for(int j=0; j<repeat; j++)
     {
@@ -123,7 +124,6 @@ void send(vector<vector<int>> data,int pin,int repeat,int hz)
         for(int i=0; i<data.size(); i++)
         {
             output(pin,hz,data[i][0],data[i][1]);
-            cout<<data[i][0]<<" "<<data[i][1]<<endl;
         }
         usleep(50000);
     }

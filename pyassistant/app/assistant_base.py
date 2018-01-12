@@ -33,13 +33,18 @@ class AssistantBase():
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.stop()
-        logger.error(exc_type)
-        logger.error(exc_val)
-        traceback.print_tb(exc_tb)
-        with open(self.setting_file, 'w') as f:
-            json.dump(self.setting,f,ensure_ascii=False,indent=2)
+        if exc_type:
+            logger.error(exc_type)
+            logger.error(exc_val)
+            traceback.print_tb(exc_tb)
+
+        self.save_setting()
 
         return False
+
+    def save_setting(self):
+        with open(self.setting_file, 'w') as f:
+            json.dump(self.setting,f,ensure_ascii=False,indent=2)
 
     def stop(self):
         self.is_active=False

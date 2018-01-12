@@ -8,6 +8,8 @@ from pyassistant.slu.cognitive_luis import CognitiveLuis
 from pyassistant.trigger.button_trigger import ButtonTrigger
 from pyassistant.trigger.snowboy import Snowboy
 from pyassistant.tts.open_jtalk import OpenJtalk
+from pyassistant.ir.ir_controller import IRController
+import pyassistant.util.alsa as alsa
 
 logging.basicConfig()
 logger = logging.getLogger('pyassistant')
@@ -28,8 +30,10 @@ class PyAssistant(AssistantBase):
                 'RECORD_THRESHOLD': 4,
                 'RECORD_BEGIN_SECOND': 0.1,
                 'RECORD_END_SECOND': 1,
-                'TRIGGER_GPIO': 21
+                'TRIGGER_GPIO': 21,
+                'IR_SCAN_GPIO':27
             }
+            self.save_setting()
 
         if self.setting['COGNITIVE_SPEECH_KEY'] == '':
             raise Exception('COGNITIVE_SPEECH_KEY not found. please set ~/.pyassistant/setting.json')
@@ -38,6 +42,7 @@ class PyAssistant(AssistantBase):
         if self.setting['COGNITIVE_LUIS_APPKEY'] == '':
             raise Exception('COGNITIVE_LUIS_APPKEY not found. please set ~/.pyassistant/setting.json')
 
+        self.ir = IRController(self.setting['IR_SCAN_GPIO'],self.config_dir)
 
     def conversation(self):
 
@@ -91,19 +96,99 @@ class PyAssistant(AssistantBase):
 
 
 
-
-@click.command()
-@click.option('--debug','-d',default=0,type=int,help='enable debug mode if set 1')
-def __main(debug):
-    if debug >0:
+@click.group(help='PyAssistant App',invoke_without_command=True)
+@click.option('--debug/--no-debug',default=False,help='enable debug mode if set 1')
+@click.pass_context
+def __main(ctx,debug):
+    if debug:
         logger.setLevel(logging.DEBUG)
 
+@__main.group(help='IR mode')
+@click.pass_context
+def ir(ctx):
+    pass
+
+@ir.command('register',help='')
+@click.option('-n','--name','name',type=str,help='',required=True)
+@click.option('-p','--pin','pin',type=str,help='',required=True)
+@click.pass_context
+def ir_register(ctx,name,pin):
+
+    with PyAssistant() as agent:
+        logger.info('IR receive module connected GPIO %d'%agent.ir.scan_pin)
+        input('send ir to IR receive module when after type any key:')
+
+        result = agent.ir.register_channel(name,send_pin=int(pin))
+        if result:
+            logger.info('registration complete!')
+
+            logger.info('\n----------- all IR channels -----------\n')
+            for name,value in agent.ir.list_channels().items():
+                logger.info('name = [%s] GPIO = [%d]'%(name,value['pin']))
+
+            logger.info('\n---------------------------------------\n')
+        else:
+            logger.error('registration faild! please retry')
+
+
+@ir.command('unregister',help='')
+@click.option('-n','--name','name',type=str,help='',required=True)
+@click.pass_context
+def ir_unregister(ctx,name):
+    with PyAssistant() as agent:
+        result = agent.ir.unregister_channel(name)
+        if result:
+            logger.info('unregister complete!')
+            logger.info('\n----------- all IR channels -----------\n')
+            for name, value in agent.ir.list_channels().items():
+                logger.info('name = [%s] GPIO = [%d]' % (name, value['pin']))
+
+            logger.info('\n---------------------------------------\n')
+        else:
+            logger.error('unregistration faild!')
+
+
+@ir.command('list',help='')
+@click.pass_context
+def ir_list(ctx):
+    with PyAssistant() as agent:
+        logger.info('\n----------- all IR channels -----------\n')
+        for name, value in agent.ir.list_channels().items():
+            logger.info('name = [%s] GPIO = [%d]' % (name, value['pin']))
+
+        logger.info('\n---------------------------------------\n')
+
+
+@ir.command('send',help='')
+@click.option('-n','--name','name',type=str,help='',required=True)
+@click.option('-r','--repeat','repeat',type=str,help='',default=3,required=False)
+@click.pass_context
+def ir_send(ctx,name,repeat):
+    with PyAssistant() as agent:
+        agent.ir.send_channel(name,send_repeat=repeat)
+
+
+@__main.group(help='Assistant mode')
+@click.pass_context
+def assistant(ctx):
+    pass
+
+@assistant.command('run',help='')
+@click.pass_context
+def run_assistant(ctx):
+    alsa.set_default(mic_card_id=2,mic_device_id=0,speaker_card_id=1,speaker_device_id=0)
     with PyAssistant() as agent:
         while True:
             for event, content in agent.conversation():
                 logger.info('------ [event] %s ------' % event)
                 logger.info(content)
-
+                if event == 'SLU_FINISH':
+                    if content[0] == 'tv_power':
+                        agent.say('テレビをトグルします')
+                        agent.ir.send_channel('tv_power')
+                    if content[0] == 'light_off':
+                        agent.say('電気を消します')
+                        agent.ir.send_channel('light_off')
 
 
 if __name__ == '__main__':
