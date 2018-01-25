@@ -6,7 +6,10 @@ sudo apt-get install -y open-jtalk-mecab-naist-jdic hts-voice-nitech-jp-atr503-m
 sudo pip3 install pyjtalk click
 sudo pip3 install git+https://github.com/Microsoft/Cognitive-LUIS-Python.git
 
-mkdir ~/.pyassistant
+if [ -ne ~/.pyassistant ]; then
+    mkdir ~/.pyassistant
+fi
+
 echo "\
 {\
                 'COGNITIVE_SPEECH_KEY': '',\
@@ -21,4 +24,4 @@ echo "\
                 'TRIGGER_GPIO': 21,\
                 'IR_SCAN_GPIO':27\
             }\
-"\>~/.pyassistant/setting.json
+">~/.pyassistant/setting.json
