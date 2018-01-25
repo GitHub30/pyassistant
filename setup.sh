@@ -6,7 +6,8 @@ sudo apt-get install -y open-jtalk-mecab-naist-jdic hts-voice-nitech-jp-atr503-m
 sudo pip3 install pyjtalk click
 sudo pip3 install git+https://github.com/Microsoft/Cognitive-LUIS-Python.git
 
-if [ -ne ~/.pyassistant ]; then
+if [ -e ~/.pyassistant ]; then
+else
     mkdir ~/.pyassistant
 fi
 
