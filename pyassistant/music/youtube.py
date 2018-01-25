@@ -1,6 +1,5 @@
 import subprocess
 import threading
-import psutil
 import signal
 import os
 import sys
