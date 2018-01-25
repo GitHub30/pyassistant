@@ -7,6 +7,7 @@ sudo pip3 install pyjtalk click
 sudo pip3 install git+https://github.com/Microsoft/Cognitive-LUIS-Python.git
 
 if [ -e ~/.pyassistant ]; then
+    :
 else
     mkdir ~/.pyassistant
 fi
