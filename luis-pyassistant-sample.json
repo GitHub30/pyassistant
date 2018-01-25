@@ -1,0 +1,161 @@
+{
+  "luis_schema_version": "2.1.0",
+  "versionId": "0.1",
+  "name": "pyassistant-sample",
+  "desc": "",
+  "culture": "ja-jp",
+  "intents": [
+    {
+      "name": "greeting"
+    },
+    {
+      "name": "next_music"
+    },
+    {
+      "name": "None"
+    },
+    {
+      "name": "play_music"
+    },
+    {
+      "name": "stop_music"
+    },
+    {
+      "name": "tv_off"
+    },
+    {
+      "name": "tv_on"
+    },
+    {
+      "name": "weather"
+    }
+  ],
+  "entities": [],
+  "composites": [],
+  "closedLists": [],
+  "bing_entities": [],
+  "model_features": [],
+  "regex_features": [],
+  "utterances": [
+    {
+      "text": "こんにちは",
+      "intent": "greeting",
+      "entities": []
+    },
+    {
+      "text": "おはよう",
+      "intent": "greeting",
+      "entities": []
+    },
+    {
+      "text": "おはようございます",
+      "intent": "greeting",
+      "entities": []
+    },
+    {
+      "text": "今日の天気は",
+      "intent": "weather",
+      "entities": []
+    },
+    {
+      "text": "天気を教えて",
+      "intent": "weather",
+      "entities": []
+    },
+    {
+      "text": "おやすみ",
+      "intent": "greeting",
+      "entities": []
+    },
+    {
+      "text": "はじめまして",
+      "intent": "greeting",
+      "entities": []
+    },
+    {
+      "text": "天気は",
+      "intent": "weather",
+      "entities": []
+    },
+    {
+      "text": "テレビつけて",
+      "intent": "tv_on",
+      "entities": []
+    },
+    {
+      "text": "テレビ消して",
+      "intent": "tv_off",
+      "entities": []
+    },
+    {
+      "text": "次の曲",
+      "intent": "next_music",
+      "entities": []
+    },
+    {
+      "text": "音楽止めて",
+      "intent": "stop_music",
+      "entities": []
+    },
+    {
+      "text": "音楽聴きたい",
+      "intent": "play_music",
+      "entities": []
+    },
+    {
+      "text": "テレビオン",
+      "intent": "tv_on",
+      "entities": []
+    },
+    {
+      "text": "テレビみたい",
+      "intent": "tv_on",
+      "entities": []
+    },
+    {
+      "text": "テレビオンにして",
+      "intent": "tv_on",
+      "entities": []
+    },
+    {
+      "text": "テレビオフにして",
+      "intent": "tv_off",
+      "entities": []
+    },
+    {
+      "text": "音楽再生して",
+      "intent": "play_music",
+      "entities": []
+    },
+    {
+      "text": "jpopの曲聴きたい",
+      "intent": "play_music",
+      "entities": []
+    },
+    {
+      "text": "アニメの曲聞きたい",
+      "intent": "play_music",
+      "entities": []
+    },
+    {
+      "text": "アニメソング聴きたい",
+      "intent": "play_music",
+      "entities": []
+    },
+    {
+      "text": "ミュージック止めて",
+      "intent": "stop_music",
+      "entities": []
+    },
+    {
+      "text": "音楽消して",
+      "intent": "stop_music",
+      "entities": []
+    },
+    {
+      "text": "次の音楽",
+      "intent": "next_music",
+      "entities": []
+    }
+  ]
+}

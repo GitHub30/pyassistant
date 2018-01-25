@@ -47,6 +47,9 @@ class YoutubeDj():
                 self.player.stop()
             self.player.play(self.current_music[1],self.__finish_current)
 
+    def stop(self):
+        self.player.stop()
+
     def get_current(self):
         return self.current_music
 

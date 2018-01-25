@@ -4,12 +4,14 @@ import click
 from pyassistant.app.assistant_base import AssistantBase
 from pyassistant.asr.cognitive_speech import CognitiveSpeech
 from pyassistant.record.sox_recorder import SoxRecorder
-from pyassistant.slu.cognitive_luis import CognitiveLuis
+from pyassistant.slu.cognitive_luis import CognitiveLuis,LuisResult
 from pyassistant.trigger.button_trigger import ButtonTrigger
 from pyassistant.trigger.snowboy import Snowboy
 from pyassistant.tts.open_jtalk import OpenJtalk
 from pyassistant.ir.ir_controller import IRController
+from pyassistant.weather.livedoor import LiveDoorWeather,WeatherResult
 import pyassistant.util.alsa as alsa
+from pyassistant.music.youtube_dj import YoutubeDj
 
 logging.basicConfig()
 logger = logging.getLogger('pyassistant')
@@ -25,6 +27,7 @@ class PyAssistant(AssistantBase):
                 'COGNITIVE_SPEECH_KEY': '',
                 'COGNITIVE_LUIS_APPID': '',
                 'COGNITIVE_LUIS_APPKEY': '',
+                'COGNITIVE_SEARCH_KEY':'',
                 # snowboy or button
                 'ACTIVATION_TRIGGER': 'snowboy',
                 'RECORD_THRESHOLD': 4,
@@ -35,14 +38,9 @@ class PyAssistant(AssistantBase):
             }
             self.save_setting()
 
-        if self.setting['COGNITIVE_SPEECH_KEY'] == '':
-            raise Exception('COGNITIVE_SPEECH_KEY not found. please set ~/.pyassistant/setting.json')
-        if self.setting['COGNITIVE_LUIS_APPID'] == '':
-            raise Exception('COGNITIVE_LUIS_APPID not found. please set ~/.pyassistant/setting.json')
-        if self.setting['COGNITIVE_LUIS_APPKEY'] == '':
-            raise Exception('COGNITIVE_LUIS_APPKEY not found. please set ~/.pyassistant/setting.json')
-
         self.ir = IRController(self.setting['IR_SCAN_GPIO'],self.config_dir)
+        self.music = YoutubeDj(self.setting['COGNITIVE_SEARCH_KEY'])
+        self.weather = LiveDoorWeather(cityid = 130010)
 
     def conversation(self):
 
@@ -82,8 +80,8 @@ class PyAssistant(AssistantBase):
                         self.setting['COGNITIVE_LUIS_APPKEY']
                     )
 
-                    intent,entities = slu.understand(asr_text)
-                    yield ('SLU_FINISH',(intent,entities))
+                    result = slu.understand(asr_text)
+                    yield ('SLU_FINISH',result)
             else:
                 raise Exception('Error in pyassistant')
 
@@ -179,17 +177,35 @@ def run_assistant(ctx):
     alsa.set_default(mic_card_id=2,mic_device_id=0,speaker_card_id=1,speaker_device_id=0)
     with PyAssistant() as agent:
         while True:
-            for event, content in agent.conversation():
+            for event, result in agent.conversation():
                 logger.info('------ [event] %s ------' % event)
-                logger.info(content)
+                logger.info(result)
                 if event == 'SLU_FINISH':
-                    if content[0] == 'tv_power':
-                        agent.say('テレビをトグルします')
-                        agent.ir.send_channel('tv_power')
-                    if content[0] == 'light_off':
-                        agent.say('電気を消します')
-                        agent.ir.send_channel('light_off')
+                    if result.get_intent() == 'greeting':
+                        agent.say('こんにちは。今日もいい天気ですね')
+                    if result.get_intent() == 'weather':
+                        agent.say('天気をお調べします')
+                        wr = agent.weather.current()
+                        agent.say('%sの天気は%sです'%(wr.get_city(),wr.get_description()))
 
+                    if result.get_intent() == 'tv_on':
+                        agent.say('テレビをオンにします')
+                        agent.ir.send_channel('tv_on')
+                    if result.get_intent() == 'tv_off':
+                        agent.say('テレビをオフにします')
+                        agent.ir.send_channel('tv_off')
+
+                    if result.get_intent() == 'play_music':
+                        if len(result.get_entities()) == 0:
+                            keyword = '音楽'
+                        else:
+                            keyword = result.get_entities()[0]
+                        agent.say(keyword+' についてのミュージックを再生します')
+                        agent.music.play(keyword)
+                    if result.get_intent() == 'next_music':
+                        agent.music.next()
+                    if result.get_intent() == 'stop_music':
+                        agent.music.stop()
 
 if __name__ == '__main__':
     __main()

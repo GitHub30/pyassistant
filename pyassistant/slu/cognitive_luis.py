@@ -4,6 +4,17 @@ logging.basicConfig()
 logger = logging.getLogger('pyassistant')
 
 
+class LuisResult():
+    def __init__(self,intent,entities):
+        self.intent = intent,
+        self.entities= entities
+
+    def get_intent(self):
+        return self.intent
+
+    def get_entities(self):
+        return self.entities
+
 
 class CognitiveLuis():
     def __init__(self,appid,appkey):
@@ -22,5 +33,5 @@ class CognitiveLuis():
         entities = res.get_entities()
         entities = [(x.get_type(), x.get_name()) for x in entities]
         intent = top.get_name()
-        result = (intent, entities)
+        result = LuisResult(intent, entities)
         return result

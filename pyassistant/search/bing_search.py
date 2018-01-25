@@ -6,6 +6,8 @@ import json
 class BingSearch():
     def __init__(self,api_key):
         self.api_key =api_key
+        if self.api_key == '':
+            raise Exception('COGNITIVE_SEARCH_KEY is empty')
 
     def search_video(self,word,lang = 'ja-JP',count=35,videoLength='short'):
         word = parse.quote(word)
