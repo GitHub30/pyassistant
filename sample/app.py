@@ -4,12 +4,12 @@ import click
 from pyassistant.app.assistant_base import AssistantBase
 from pyassistant.asr.cognitive_speech import CognitiveSpeech
 from pyassistant.record.sox_recorder import SoxRecorder
-from pyassistant.slu.cognitive_luis import CognitiveLuis,LuisResult
+from pyassistant.slu.cognitive_luis import CognitiveLuis
 from pyassistant.trigger.button_trigger import ButtonTrigger
 from pyassistant.trigger.snowboy import Snowboy
 from pyassistant.tts.open_jtalk import OpenJtalk
 from pyassistant.ir.ir_controller import IRController
-from pyassistant.weather.livedoor import LiveDoorWeather,WeatherResult
+from pyassistant.weather.livedoor import LiveDoorWeather
 import pyassistant.util.alsa as alsa
 from pyassistant.music.youtube_dj import YoutubeDj
 
@@ -22,25 +22,15 @@ class PyAssistant(AssistantBase):
         super().__init__()
         self.tts = OpenJtalk()
 
-        if self.first_launch:
-            self.setting = {
-                'COGNITIVE_SPEECH_KEY': '',
-                'COGNITIVE_LUIS_APPID': '',
-                'COGNITIVE_LUIS_APPKEY': '',
-                'COGNITIVE_SEARCH_KEY':'',
-                # snowboy or button
-                'ACTIVATION_TRIGGER': 'snowboy',
-                'RECORD_THRESHOLD': 4,
-                'RECORD_BEGIN_SECOND': 0.1,
-                'RECORD_END_SECOND': 1,
-                'TRIGGER_GPIO': 21,
-                'IR_SCAN_GPIO':27
-            }
-            self.save_setting()
-
         self.ir = IRController(self.setting['IR_SCAN_GPIO'],self.config_dir)
         self.music = YoutubeDj(self.setting['COGNITIVE_SEARCH_KEY'])
-        self.weather = LiveDoorWeather(cityid = 130010)
+        self.weather = LiveDoorWeather()
+        alsa.set_default(
+            mic_card_id=self.setting['MIC_CARD_ID'],
+            mic_device_id=self.setting['MIC_DEVICE_ID'],
+            speaker_card_id=self.setting['SPEAKER_CARD_ID'],
+            speaker_device_id=self.setting['SPEAKER_DEVICE_ID']
+        )
 
     def conversation(self):
 
@@ -174,7 +164,6 @@ def assistant(ctx):
 @assistant.command('run',help='')
 @click.pass_context
 def run_assistant(ctx):
-    alsa.set_default(mic_card_id=2,mic_device_id=0,speaker_card_id=1,speaker_device_id=0)
     with PyAssistant() as agent:
         while True:
             for event, result in agent.conversation():
@@ -185,7 +174,7 @@ def run_assistant(ctx):
                         agent.say('こんにちは。今日もいい天気ですね')
                     if result.get_intent() == 'weather':
                         agent.say('天気をお調べします')
-                        wr = agent.weather.current()
+                        wr = agent.weather.current(cityid = 130010)
                         agent.say('%sの天気は%sです'%(wr.get_city(),wr.get_description()))
 
                     if result.get_intent() == 'tv_on':

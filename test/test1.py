@@ -1,6 +1,6 @@
 import unittest
 
-from app import Assistant
+from sample.app import Assistant
 
 
 class TestAssistant(unittest.TestCase):

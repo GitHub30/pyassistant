@@ -1,0 +1,3 @@
+recursive-include pyassistant *
+include setup.sh
+include pyassistant/trigger/_snowboydetect.so

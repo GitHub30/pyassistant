@@ -13,7 +13,8 @@ setup = os.path.join(dir_path,'setup.sh')
 
 if sys.platform.startswith('linux'):
     if not os.path.exists(resource):
-        subprocess.call(setup)
+        #subprocess.call(setup)
+        pass
     from . import snowboydetect
 
 else:

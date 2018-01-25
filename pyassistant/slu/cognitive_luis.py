@@ -6,7 +6,7 @@ logger = logging.getLogger('pyassistant')
 
 class LuisResult():
     def __init__(self,intent,entities):
-        self.intent = intent,
+        self.intent = intent
         self.entities= entities
 
     def get_intent(self):
@@ -14,6 +14,9 @@ class LuisResult():
 
     def get_entities(self):
         return self.entities
+
+    def __str__(self):
+        return "<Intent:{},Entities:[{}]>".format(self.intent,','.join(self.entities))
 
 
 class CognitiveLuis():

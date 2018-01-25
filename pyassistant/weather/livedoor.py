@@ -13,6 +13,9 @@ class WeatherResult():
     def get_description(self):
         return self.description
 
+    def __str__(self):
+        return "<City:{},Description:{}>".format(self.city,self.description)
+
 class LiveDoorWeather():
     def __init__(self):
         pass
