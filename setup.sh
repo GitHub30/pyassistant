@@ -11,17 +11,17 @@ if [ -ne ~/.pyassistant ]; then
 fi
 
 echo "\
-{\
-                'COGNITIVE_SPEECH_KEY': '',\
-                'COGNITIVE_LUIS_APPID': '',\
-                'COGNITIVE_LUIS_APPKEY': '',\
-                'COGNITIVE_SEARCH_KEY':'',\
-                # snowboy or button\
-                'ACTIVATION_TRIGGER': 'snowboy',\
-                'RECORD_THRESHOLD': 4,\
-                'RECORD_BEGIN_SECOND': 0.1,\
-                'RECORD_END_SECOND': 1,\
-                'TRIGGER_GPIO': 21,\
-                'IR_SCAN_GPIO':27\
-            }\
+{\n\
+                'COGNITIVE_SPEECH_KEY': '',\n\
+                'COGNITIVE_LUIS_APPID': '',\n\
+                'COGNITIVE_LUIS_APPKEY': '',\n\
+                'COGNITIVE_SEARCH_KEY':'',\n\
+                # snowboy or button\n\
+                'ACTIVATION_TRIGGER': 'snowboy',\n\
+                'RECORD_THRESHOLD': 4,\n\
+                'RECORD_BEGIN_SECOND': 0.1,\n\
+                'RECORD_END_SECOND': 1,\n\
+                'TRIGGER_GPIO': 21,\n\
+                'IR_SCAN_GPIO':27\n\
+}\n\
 ">~/.pyassistant/setting.json
