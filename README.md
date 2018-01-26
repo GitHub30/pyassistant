@@ -31,7 +31,7 @@ cp samples/app.py .
 
 ### get cognitive service keys
 
-access and register here (https://azure.microsoft.com/ja-jp/try/cognitive-services/)[https://azure.microsoft.com/ja-jp/try/cognitive-services/]
+access and register here [https://azure.microsoft.com/ja-jp/try/cognitive-services/](https://azure.microsoft.com/ja-jp/try/cognitive-services/)
 
 get following apis
 
@@ -46,7 +46,7 @@ download sample
 wget https://raw.githubusercontent.com/garicchi/pyassistant/master/sample/luis-pyassistant-sample.json
 ```
 
-access and register here (https://www.luis.ai/)[https://www.luis.ai/]
+access and register here [https://www.luis.ai/](https://www.luis.ai/)
 
 click ```import new app``` and upload above json file
 
