@@ -39,8 +39,8 @@ else
                     \"RECORD_THRESHOLD\": 4,\n\
                     \"RECORD_BEGIN_SECOND\": 0.1,\n\
                     \"RECORD_END_SECOND\": 1,\n\
-                    \"TRIGGER_GPIO\": 21,\n\
-                    \"IR_SCAN_GPIO\":27,\n\
+                    \"TRIGGER_GPIO\": 27,\n\
+                    \"IR_SCAN_GPIO\":21,\n\
                     \"MIC_CARD_ID\":1,\n\
                     \"MIC_DEVICE_ID\":0,\n\
                     \"SPEAKER_CARD_ID\":2,\n\
