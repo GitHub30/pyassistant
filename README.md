@@ -90,7 +90,7 @@ buy some circuit elements
 
 ### create following circuit
 
-![alt](ir_circuit.jpg)
+![alt](img/ir_circuit.jpg)
 
 ### register ir
 
