@@ -41,9 +41,9 @@ else
                     \"RECORD_END_SECOND\": 1,\n\
                     \"TRIGGER_GPIO\": 21,\n\
                     \"IR_SCAN_GPIO\":27,\n\
-                    \"MIC_CARD_ID\":2,\n\
+                    \"MIC_CARD_ID\":1,\n\
                     \"MIC_DEVICE_ID\":0,\n\
-                    \"SPEAKER_CARD_ID\":1,\n\
+                    \"SPEAKER_CARD_ID\":2,\n\
                     \"SPEAKER_DEVICE_ID\":0\n\
     }\n\
     ">~/.pyassistant/setting.json
