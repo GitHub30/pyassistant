@@ -28,6 +28,7 @@ rm -rf snowboy
 if [ -e ~/.pyassistant ]; then
     :
 else
+    mkdir ~/.pyassistant
     echo "\
     {\n\
                     \"COGNITIVE_SPEECH_KEY\": \"\",\n\
@@ -46,7 +47,6 @@ else
                     \"SPEAKER_DEVICE_ID\":0\n\
     }\n\
     ">~/.pyassistant/setting.json
-    mkdir ~/.pyassistant
 fi
 
 echo "please edit ~/.pyassistant/setting.json"
