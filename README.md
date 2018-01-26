@@ -73,3 +73,5 @@ nano ~/.pyassistant/setting.json
 ```sh
 python app.py assistant run
 ```
+
+you can say "ハローラズパイ" and can say "今日の天気は？"
